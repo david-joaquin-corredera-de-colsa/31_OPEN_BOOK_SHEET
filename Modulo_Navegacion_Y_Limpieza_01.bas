@@ -1,106 +1,12 @@
 Attribute VB_Name = "Modulo_Navegacion_Y_Limpieza_01"
 
-' =============================================================================
-' MODULO: Modulo_Navegacion_Y_Limpieza.bas
-' PROYECTO: IMPORTAR_DATOS_PRESUPUESTO
-' AUTOR: david-joaquin-corredera-de-colsa
-' FECHA CREACION: 2025-06-03 13:54:50 UTC
-' FECHA ACTUALIZACION: 2025-06-03 15:18:26 UTC
-' DESCRIPCION: Modulo para navegacion inicial, limpieza de hojas historicas e inventario
-' COMPATIBILIDAD: Excel 97, Excel 2003, Excel 2007, Excel 365
-' REPOSITORIO: OneDrive, SharePoint, Teams compatible
-' =============================================================================
+
+Option Explicit
 
 Option Explicit
 
 ' Variables globales del modulo
 Public vHojaInicial As String
-
-Public Function F010_Abrir_Hoja_Inicial() As Integer
-
-    ' =============================================================================
-    ' FUNCION: F010_Abrir_Hoja_Inicial
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Funcion para navegar a la hoja inicial del libro
-    ' PARAMETROS: Ninguno
-    ' RETORNO: Integer (0=exito, >0=error)
-    ' COMPATIBILIDAD: Excel 97-365, OneDrive/SharePoint/Teams
-    ' =============================================================================
-    ' RESUMEN EXHAUSTIVO DE PASOS:
-    ' 1. Configurar la variable vHojaInicial con "00_Ejecutar_Procesos"
-    ' 2. Verificar que el libro de trabajo este disponible
-    ' 3. Buscar la hoja especificada en la coleccion de hojas del libro
-    ' 4. Si la hoja existe, activarla y posicionarse en celda A1
-    ' 5. Si la hoja no existe, retornar codigo de error
-    ' 6. Retornar codigo de resultado
-
-    On Error GoTo ErrorHandler
-    
-    Dim vResultado As Integer
-    Dim vHojaEncontrada As Boolean
-    Dim vContadorHojas As Integer
-    Dim vNombreHojaActual As String
-    Dim vLineaError As Integer
-    
-    vResultado = 0
-    vHojaEncontrada = False
-    vContadorHojas = 0
-    vLineaError = 10
-    
-    ' Paso 1: Configurar la variable vHojaInicial con "00_Ejecutar_Procesos"
-    vHojaInicial = "00_Ejecutar_Procesos"
-    vLineaError = 20
-    
-    ' Paso 2: Verificar que el libro de trabajo este disponible
-    vLineaError = 30
-    If ThisWorkbook Is Nothing Then
-        vResultado = 1001 ' Error: Libro de trabajo no disponible
-        GoTo ErrorHandler
-    End If
-    
-    ' Paso 3: Buscar la hoja especificada en la coleccion de hojas del libro
-    vLineaError = 40
-    For vContadorHojas = 1 To ThisWorkbook.Worksheets.Count
-        vNombreHojaActual = ThisWorkbook.Worksheets(vContadorHojas).Name
-        If StrComp(vNombreHojaActual, vHojaInicial, vbTextCompare) = 0 Then
-            vHojaEncontrada = True
-            Exit For
-        End If
-    Next vContadorHojas
-    
-    ' Paso 4: Si la hoja existe, activarla y posicionarse en celda A1
-    vLineaError = 50
-    If vHojaEncontrada Then
-        ThisWorkbook.Worksheets(vHojaInicial).Activate
-        vLineaError = 55
-        ThisWorkbook.Worksheets(vHojaInicial).Range("A1").Select
-        vResultado = 0 ' Exito
-    Else
-        ' Paso 5: Si la hoja no existe, retornar codigo de error
-        vResultado = 1002 ' Error: Hoja no encontrada
-    End If
-    
-    ' Paso 6: Retornar codigo de resultado
-    F010_Abrir_Hoja_Inicial = vResultado
-    Exit Function
-    
-ErrorHandler:
-    Dim vMensajeError As String
-    vMensajeError = "ERROR en F010_Abrir_Hoja_Inicial" & vbCrLf & _
-                   "Linea aproximada: " & vLineaError & vbCrLf & _
-                   "Numero de Error: " & Err.Number & vbCrLf & _
-                   "Descripcion: " & Err.Description & vbCrLf & _
-                   "Hoja objetivo: " & vHojaInicial
-    
-    MsgBox vMensajeError, vbCritical, "Error F010_Abrir_Hoja_Inicial"
-    
-    If vResultado = 0 Then
-        vResultado = 9999 ' Error no especificado
-    End If
-    
-    F010_Abrir_Hoja_Inicial = vResultado
-    
-End Function
 
 Public Function F011_Limpieza_Hojas_Historicas() As Boolean
 
@@ -238,23 +144,18 @@ Public Function Function_Return_Integer_to_Boolean(vInteger As Integer) As Boole
     ' Módulo: Function_Return_Integer_to_Boolean
     ' Fecha y Hora de Creación: 2025-06-09 09:10:01 UTC
     ' Autor: david-joaquin-corredera-de-colsa
-    '
     ' Descripción:
     ' Convierte un valor entero a un valor booleano siguiendo una lógica específica
     ' donde 0 se considera verdadero (True) y cualquier otro valor se considera
     ' falso (False). Esta función implementa una lógica inversa a la conversión
     ' booleana estándar de VBA.
-    '
     ' Parámetros:
     ' - vInteger (Integer): Valor entero a convertir a booleano
-    '
     ' Valor de Retorno:
     ' - Boolean: True si el valor de entrada es 0, False para cualquier otro valor
-    '
     ' Lógica de Conversión:
     ' - Input: 0 ? Output: True
     ' - Input: cualquier otro número ? Output: False
-    '
     ' Casos de Uso Típicos:
     ' - Validación de códigos de error (donde 0 indica éxito)
     ' - Conversión de flags numéricos a booleanos
@@ -265,12 +166,10 @@ Public Function Function_Return_Integer_to_Boolean(vInteger As Integer) As Boole
     ' resultado = Function_Return_Integer_to_Boolean(0)    ' Devuelve True
     ' resultado = Function_Return_Integer_to_Boolean(1)    ' Devuelve False
     ' resultado = Function_Return_Integer_to_Boolean(-5)   ' Devuelve False
-    '
     ' Notas Importantes:
     ' ?? Esta función implementa una lógica inversa a la conversión booleana
     ' estándar de VBA, donde normalmente 0 equivale a False y cualquier valor
     ' diferente de 0 equivale a True.
-    '
     ' Compatibilidad: Excel 97, 2003, 365, OneDrive, SharePoint, Teams
     ' Versión: 1.0
     '******************************************************************************
@@ -315,15 +214,15 @@ GestorErrores:
     Function_Return_Integer_to_Boolean = False
 End Function
 
-' =============================================================================
-' FUNCION: F012_Inventariar_Hojas
-' FECHA: 2025-06-03 15:18:26 UTC
-' DESCRIPCION: Funcion para crear inventario completo de todas las hojas del libro
-' PARAMETROS: Ninguno
-' RETORNO: Integer (0=exito, >0=error)
-' COMPATIBILIDAD: Excel 97-365, OneDrive/SharePoint/Teams
-' =============================================================================
 Public Function F012_Inventariar_Hojas() As Integer
+    ' =============================================================================
+    ' FUNCION: F012_Inventariar_Hojas
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Funcion para crear inventario completo de todas las hojas del libro
+    ' PARAMETROS: Ninguno
+    ' RETORNO: Integer (0=exito, >0=error)
+    ' COMPATIBILIDAD: Excel 97-365, OneDrive/SharePoint/Teams
+    ' =============================================================================
 
     ' RESUMEN EXHAUSTIVO DE PASOS:
     ' 1. Verificar existencia de hoja "01_Inventario"
@@ -580,109 +479,6 @@ ErrorHandler:
     
 End Sub
 
-Public Sub fun804_Aplicar_Formato_Inventario_Fila(vHojaInventario As Worksheet, vFila As Integer, vEsVisible As Boolean)
-
-    ' =============================================================================
-    ' FUNCION AUXILIAR: fun804_Aplicar_Formato_Inventario_Fila
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Aplica formato a una fila del inventario segun visibilidad
-    ' PARAMETROS: vHojaInventario (Worksheet), vFila (Integer), vEsVisible (Boolean)
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Dim vRangoFila As Range
-    
-    ' Definir rango de la fila (columnas 2 a 4)
-    Set vRangoFila = vHojaInventario.Range("B" & vFila & ":D" & vFila)
-    
-    If vEsVisible Then
-        ' Fila visible: sin color de fondo
-        vRangoFila.Interior.ColorIndex = xlNone
-        vHojaInventario.Cells(vFila, 4).Value = ">> visible <<"
-    Else
-        ' Fila oculta: fondo gris medio
-        vRangoFila.Interior.Color = RGB(128, 128, 128)
-        vHojaInventario.Cells(vFila, 4).Value = "OCULTA"
-    End If
-    
-    Exit Sub
-    
-ErrorHandler:
-    ' No mostrar error, simplemente continuar
-    
-End Sub
-
-Public Function fun805_Es_Hoja_Protegida(vNombreHoja As String) As Boolean
-    
-    ' =============================================================================
-    ' FUNCION AUXILIAR: fun805_Es_Hoja_Protegida
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Verifica si una hoja esta en la lista de hojas protegidas
-    ' PARAMETROS: vNombreHoja (String)
-    ' RETORNO: Boolean (True=protegida, False=no protegida)
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Dim vHojasProtegidas(1 To 6) As String
-    Dim i As Integer
-    
-    ' Lista de hojas protegidas
-    vHojasProtegidas(1) = "00_Ejecutar_Procesos"
-    vHojasProtegidas(2) = "01_Inventario"
-    vHojasProtegidas(3) = "05_Username"
-    vHojasProtegidas(4) = "06_Delimitadores_Originales"
-    vHojasProtegidas(5) = "09_Report_PL"
-    vHojasProtegidas(6) = "10_Report_PL_AH"
-    
-    fun805_Es_Hoja_Protegida = False
-    
-    For i = 1 To 6
-        If StrComp(vNombreHoja, vHojasProtegidas(i), vbTextCompare) = 0 Then
-            fun805_Es_Hoja_Protegida = True
-            Exit Function
-        End If
-    Next i
-    
-    Exit Function
-    
-ErrorHandler:
-    fun805_Es_Hoja_Protegida = False
-    
-End Function
-
-Public Sub fun806_Eliminar_Hoja_Segura(vNombreHoja As String)
-    
-    ' =============================================================================
-    ' SUB AUXILIAR: fun806_Eliminar_Hoja_Segura
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Elimina una hoja de forma segura con control de errores
-    ' PARAMETROS: vNombreHoja (String)
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Dim vAlertas As Boolean
-    
-    ' Desactivar alertas para evitar confirmaciones
-    vAlertas = Application.DisplayAlerts
-    Application.DisplayAlerts = False
-    
-    ' Eliminar la hoja
-    ThisWorkbook.Worksheets(vNombreHoja).Delete
-    
-    ' Restaurar alertas
-    Application.DisplayAlerts = vAlertas
-    
-    Exit Sub
-    
-ErrorHandler:
-    Application.DisplayAlerts = vAlertas
-    ' No mostrar error, simplemente continuar
-    
-End Sub
-
 Public Sub fun807_Gestionar_Hoja_Envio(vNombreHoja As String, vHojasEnvio() As String, vNumHojasEnvio As Integer)
     
     ' =============================================================================
@@ -722,60 +518,6 @@ ErrorHandler:
     ' No mostrar error, simplemente continuar
     
 End Sub
-
-Public Function fun808_Obtener_Hoja_Inventario() As Worksheet
-    
-    ' =============================================================================
-    ' FUNCION AUXILIAR: fun808_Obtener_Hoja_Inventario
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Obtiene referencia a la hoja de inventario
-    ' RETORNO: Worksheet (objeto hoja o Nothing si error)
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Set fun808_Obtener_Hoja_Inventario = ThisWorkbook.Worksheets("01_Inventario")
-    Exit Function
-    
-ErrorHandler:
-    Set fun808_Obtener_Hoja_Inventario = Nothing
-    
-End Function
-
-Public Sub fun809_Crear_Enlace_Hoja(vHojaDestino As Worksheet, vFila As Integer, vColumna As Integer, vNombreHoja As String)
-
-    ' =============================================================================
-    ' SUB AUXILIAR: fun809_Crear_Enlace_Hoja
-    ' FECHA: 2025-06-03 15:18:26 UTC
-    ' DESCRIPCION: Crea un hyperlink a una hoja especifica (compatible Excel 97)
-    ' PARAMETROS: vHojaDestino, vFila, vColumna, vNombreHoja
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Dim vCelda As Range
-    Dim vDireccion As String
-    
-    Set vCelda = vHojaDestino.Cells(vFila, vColumna)
-    vDireccion = "'" & vNombreHoja & "'!A1"
-    
-    ' Metodo compatible con Excel 97
-    vCelda.Value = "Ir a " & vNombreHoja
-    vCelda.Font.ColorIndex = 5 ' Azul
-    vCelda.Font.Underline = xlUnderlineStyleSingle
-    
-    ' Crear hyperlink (Excel 97+ compatible)
-    vHojaDestino.Hyperlinks.Add Anchor:=vCelda, Address:="", SubAddress:=vDireccion, TextToDisplay:="Ir a " & vNombreHoja
-    
-    Exit Sub
-    
-ErrorHandler:
-    ' Si falla el hyperlink, al menos mostrar el texto
-    vCelda.Value = vNombreHoja
-    
-End Sub
-
-
 
 Public Function Ejecutar_Procesos_Inicio_Libro() As Boolean
 
@@ -865,3 +607,384 @@ ErrorHandler:
     
 End Function
 
+
+Public Function fun808_ObtenerCarpetaSistema(ByVal strTipoOrigen As String) As String
+    
+    '******************************************************************************
+    ' FUNCION CONSOLIDADA: fun808_ObtenerCarpetaSistema
+    ' FECHA Y HORA DE CREACION: 2025-06-12 15:19:14 UTC
+    ' AUTOR: david-joaquin-corredera-de-colsa
+    '
+    ' PROPOSITO:
+    ' Función consolidada que obtiene carpetas del sistema desde múltiples fuentes:
+    ' variables de entorno del sistema, propiedades de Excel, y directorios especiales.
+    ' Reemplaza las funciones individuales fun803, fun804, fun805, fun806.
+    '
+    ' RESUMEN EXHAUSTIVO DE PASOS:
+    ' 1. Validación y normalización de parámetros de entrada
+    ' 2. Identificación del método de obtención según el tipo especificado
+    ' 3. Ejecución del método específico para cada tipo de origen
+    ' 4. Manejo de casos especiales y fallbacks automáticos
+    ' 5. Normalización y limpieza de la ruta obtenida
+    ' 6. Validación opcional de existencia de la carpeta
+    ' 7. Logging detallado de la operación realizada
+    ' 8. Retorno del resultado final normalizado
+    '
+    ' PARAMETROS:
+    ' - strTipoOrigen (String): Tipo de origen de la carpeta a obtener
+    '   Valores soportados exactos (case-insensitive):
+    '   * "TEMP" - Variable de entorno %TEMP% del sistema
+    '   * "TMP" - Variable de entorno %TMP% del sistema
+    '   * "USERPROFILE" - Variable de entorno %USERPROFILE% del sistema
+    '   * "CURRENT_DIR" - Directorio de trabajo actual
+    '   * "EXCEL_PATH_CURRENT_BOOK" - Carpeta del libro Excel actual
+    '   * "EXCEL_PATH_TEMP" - Carpeta temporal de Excel
+    '
+    ' RETORNO: String - Ruta de la carpeta obtenida o cadena vacía si error
+    '
+    ' EJEMPLOS DE USO:
+    ' Dim strCarpetaTemp As String
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("TEMP")
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("TMP")
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("USERPROFILE")
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("CURRENT_DIR")
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("EXCEL_PATH_CURRENT_BOOK")
+    ' strCarpetaTemp = fun808_ObtenerCarpetaSistema("EXCEL_PATH_TEMP")
+    '
+    ' COMPATIBILIDAD: Excel 97, 2003, 2007, 365, OneDrive, SharePoint, Teams
+    '******************************************************************************
+    
+    ' Variables para control de errores
+    Dim strFuncion As String
+    Dim lngLineaError As Long
+    Dim strMensajeError As String
+    
+    ' Variables para procesamiento
+    Dim strTipoNormalizado As String
+    Dim strRutaObtenida As String
+    Dim strRutaLimpia As String
+    Dim strMetodoUsado As String
+    
+    ' Variables para validación y manejo de objetos
+    Dim blnValidarCarpeta As Boolean
+    Dim objFSO As Object
+    Dim intUltimaBarraDiagonal As Integer
+    
+    ' Inicialización
+    strFuncion = "fun808_ObtenerCarpetaSistema"
+    fun808_ObtenerCarpetaSistema = ""
+    lngLineaError = 0
+    blnValidarCarpeta = True
+    strMetodoUsado = ""
+    strRutaObtenida = ""
+    strRutaLimpia = ""
+    
+    On Error GoTo GestorErrores
+    
+    '--------------------------------------------------------------------------
+    ' 1. Validación y normalización de parámetros de entrada
+    '--------------------------------------------------------------------------
+    lngLineaError = 30
+    
+    ' Verificar que el parámetro no esté vacío
+    If Len(Trim(strTipoOrigen)) = 0 Then
+        Err.Raise ERROR_BASE_IMPORT + 8101, strFuncion, _
+            "Parámetro strTipoOrigen está vacío"
+    End If
+    
+    ' Verificar longitud razonable del parámetro
+    If Len(Trim(strTipoOrigen)) > 50 Then
+        Err.Raise ERROR_BASE_IMPORT + 8102, strFuncion, _
+            "Parámetro strTipoOrigen demasiado largo: " & Len(Trim(strTipoOrigen)) & " caracteres"
+    End If
+    
+    ' Normalizar a mayúsculas y eliminar espacios
+    strTipoNormalizado = UCase(Trim(strTipoOrigen))
+    
+    '--------------------------------------------------------------------------
+    ' 2. Identificación del método de obtención según el tipo especificado
+    '--------------------------------------------------------------------------
+    lngLineaError = 40
+    
+    ' Validar tipos de origen soportados exactamente como especificado
+    Select Case strTipoNormalizado
+        Case "TEMP"
+            strMetodoUsado = "Variable de entorno TEMP del sistema"
+            
+        Case "TMP"
+            strMetodoUsado = "Variable de entorno TMP del sistema"
+            
+        Case "USERPROFILE"
+            strMetodoUsado = "Variable de entorno USERPROFILE del sistema"
+            
+        Case "CURRENT_DIR"
+            strMetodoUsado = "Directorio de trabajo actual"
+            
+        Case "EXCEL_PATH_CURRENT_BOOK"
+            strMetodoUsado = "Carpeta del libro Excel actual"
+            
+        Case "EXCEL_PATH_TEMP"
+            strMetodoUsado = "Carpeta temporal de Excel"
+            
+        Case Else
+            Err.Raise ERROR_BASE_IMPORT + 8103, strFuncion, _
+                "Tipo de origen no soportado: " & Chr(34) & strTipoNormalizado & Chr(34) & vbCrLf & _
+                "Tipos válidos: TEMP, TMP, USERPROFILE, CURRENT_DIR, EXCEL_PATH_CURRENT_BOOK, EXCEL_PATH_TEMP"
+    End Select
+    
+    '--------------------------------------------------------------------------
+    ' 3. Ejecución del método específico para cada tipo de origen
+    '--------------------------------------------------------------------------
+    lngLineaError = 50
+    
+    Select Case strTipoNormalizado
+        Case "TEMP"
+            '----------------------------------------------------------------------
+            ' 3A. Variable de entorno %TEMP% del sistema
+            '----------------------------------------------------------------------
+            lngLineaError = 51
+            
+            ' Obtener valor usando función Environ() compatible Excel 97-365
+            strRutaObtenida = Environ("TEMP")
+            
+            If Len(strRutaObtenida) = 0 Then
+                Call fun801_LogMessage("WARNING - Variable de entorno TEMP no encontrada o vacía", _
+                    False, "", strFuncion)
+                Exit Function
+            End If
+            
+        Case "TMP"
+            '----------------------------------------------------------------------
+            ' 3B. Variable de entorno %TMP% del sistema
+            '----------------------------------------------------------------------
+            lngLineaError = 52
+            
+            ' Obtener valor usando función Environ() compatible Excel 97-365
+            strRutaObtenida = Environ("TMP")
+            
+            If Len(strRutaObtenida) = 0 Then
+                Call fun801_LogMessage("WARNING - Variable de entorno TMP no encontrada o vacía", _
+                    False, "", strFuncion)
+                Exit Function
+            End If
+            
+        Case "USERPROFILE"
+            '----------------------------------------------------------------------
+            ' 3C. Variable de entorno %USERPROFILE% del sistema
+            '----------------------------------------------------------------------
+            lngLineaError = 53
+            
+            ' Obtener valor usando función Environ() compatible Excel 97-365
+            strRutaObtenida = Environ("USERPROFILE")
+            
+            If Len(strRutaObtenida) = 0 Then
+                Call fun801_LogMessage("WARNING - Variable de entorno USERPROFILE no encontrada o vacía", _
+                    False, "", strFuncion)
+                Exit Function
+            End If
+            
+        Case "CURRENT_DIR"
+            '----------------------------------------------------------------------
+            ' 3D. Directorio de trabajo actual
+            '----------------------------------------------------------------------
+            lngLineaError = 54
+            
+            ' Usar CurDir() que es compatible con Excel 97-365
+            strRutaObtenida = CurDir()
+            
+            If Len(strRutaObtenida) = 0 Then
+                Call fun801_LogMessage("WARNING - No se pudo obtener directorio de trabajo actual", _
+                    False, "", strFuncion)
+                Exit Function
+            End If
+            
+        Case "EXCEL_PATH_CURRENT_BOOK"
+            '----------------------------------------------------------------------
+            ' 3E. Carpeta del libro Excel actual
+            '----------------------------------------------------------------------
+            lngLineaError = 55
+            
+            ' Usar ThisWorkbook.Path que es compatible Excel 97-365
+            strRutaObtenida = ThisWorkbook.Path
+            
+            ' Manejar casos especiales para OneDrive/SharePoint/Teams
+            If Len(strRutaObtenida) = 0 Then
+                ' El libro no está guardado o está en ubicación en línea
+                Call fun801_LogMessage("WARNING - Libro no guardado o en ubicación en línea (OneDrive/SharePoint/Teams)", _
+                    False, "", strFuncion)
+                
+                ' Intentar alternativa extrayendo ruta desde FullName
+                If Len(ThisWorkbook.FullName) > 0 Then
+                    intUltimaBarraDiagonal = InStrRev(ThisWorkbook.FullName, "\")
+                    If intUltimaBarraDiagonal > 0 Then
+                        strRutaObtenida = Left(ThisWorkbook.FullName, intUltimaBarraDiagonal - 1)
+                        Call fun801_LogMessage("INFO - Ruta extraída desde FullName: " & strRutaObtenida, _
+                            False, "", strFuncion)
+                    End If
+                End If
+                
+                ' Si aún no hay ruta válida, usar directorio actual como fallback
+                If Len(strRutaObtenida) = 0 Then
+                    strRutaObtenida = CurDir()
+                    Call fun801_LogMessage("INFO - Usando directorio actual como fallback para Excel: " & _
+                        strRutaObtenida, False, "", strFuncion)
+                End If
+            End If
+            
+        Case "EXCEL_PATH_TEMP"
+            '----------------------------------------------------------------------
+            ' 3F. Carpeta temporal de Excel
+            '----------------------------------------------------------------------
+            lngLineaError = 56
+            
+            ' Excel no tiene carpeta temporal específica, usar jerarquía de fallback:
+            ' 1. Intentar TEMP del sistema
+            ' 2. Si falla, intentar TMP del sistema
+            ' 3. Si falla, usar directorio actual
+            
+            strRutaObtenida = Environ("TEMP")
+            If Len(strRutaObtenida) = 0 Then
+                strRutaObtenida = Environ("TMP")
+                If Len(strRutaObtenida) > 0 Then
+                    Call fun801_LogMessage("INFO - Usando TMP como fallback para Excel temp", _
+                        False, "", strFuncion)
+                End If
+            End If
+            
+            If Len(strRutaObtenida) = 0 Then
+                strRutaObtenida = CurDir()
+                Call fun801_LogMessage("INFO - Usando directorio actual como fallback para Excel temp: " & _
+                    strRutaObtenida, False, "", strFuncion)
+            End If
+            
+            If Len(strRutaObtenida) = 0 Then
+                Call fun801_LogMessage("ERROR - No se pudo obtener ninguna carpeta temporal válida", _
+                    True, "", strFuncion)
+                Exit Function
+            End If
+    End Select
+    
+    '--------------------------------------------------------------------------
+    ' 4. Manejo de casos especiales y fallbacks automáticos
+    '--------------------------------------------------------------------------
+    lngLineaError = 60
+    
+    ' Verificar que se obtuvo algún resultado válido
+    If Len(strRutaObtenida) = 0 Then
+        Call fun801_LogMessage("ERROR - No se obtuvo resultado para tipo: " & strTipoNormalizado, _
+            True, "", strFuncion)
+        Exit Function
+    End If
+    
+    ' Verificar caracteres peligrosos o inválidos usando CHR() como solicitado
+    If InStr(strRutaObtenida, Chr(34)) > 0 Or _   ' Comillas dobles "
+       InStr(strRutaObtenida, Chr(60)) > 0 Or _   ' Menor que <
+       InStr(strRutaObtenida, Chr(62)) > 0 Or _   ' Mayor que >
+       InStr(strRutaObtenida, Chr(124)) > 0 Or _  ' Pipe |
+       InStr(strRutaObtenida, Chr(42)) > 0 Or _   ' Asterisco *
+       InStr(strRutaObtenida, Chr(63)) > 0 Then   ' Interrogación ?
+        
+        Err.Raise ERROR_BASE_IMPORT + 8104, strFuncion, _
+            "Ruta contiene caracteres no válidos o peligrosos: " & strRutaObtenida
+    End If
+    
+    '--------------------------------------------------------------------------
+    ' 5. Normalización y limpieza de la ruta obtenida
+    '--------------------------------------------------------------------------
+    lngLineaError = 70
+    
+    ' Eliminar espacios al inicio y final
+    strRutaLimpia = Trim(strRutaObtenida)
+    
+    ' Eliminar barra diagonal final si existe (normalización, excepto para raíces como C:\)
+    If Right(strRutaLimpia, 1) = "\" And Len(strRutaLimpia) > 3 Then
+        strRutaLimpia = Left(strRutaLimpia, Len(strRutaLimpia) - 1)
+    End If
+    
+    ' Verificar que la ruta tiene una longitud mínima razonable
+    If Len(strRutaLimpia) < 3 Then
+        Err.Raise ERROR_BASE_IMPORT + 8105, strFuncion, _
+            "Ruta demasiado corta para ser válida: " & Chr(34) & strRutaLimpia & Chr(34) & _
+            " (Longitud: " & Len(strRutaLimpia) & " caracteres)"
+    End If
+    
+    '--------------------------------------------------------------------------
+    ' 6. Validación opcional de existencia de la carpeta
+    '--------------------------------------------------------------------------
+    lngLineaError = 80
+    
+    If blnValidarCarpeta Then
+        ' Crear objeto FileSystemObject compatible con Excel 97-365
+        Set objFSO = CreateObject("Scripting.FileSystemObject")
+        
+        ' Verificar si la carpeta existe realmente
+        If Not objFSO.FolderExists(strRutaLimpia) Then
+            Call fun801_LogMessage("WARNING - Carpeta obtenida no existe físicamente: " & strRutaLimpia & _
+                " (Método: " & strMetodoUsado & ", Tipo: " & strTipoNormalizado & ")", _
+                False, "", strFuncion)
+            
+            ' Para rutas de Excel en OneDrive/SharePoint, esto puede ser normal
+            ' No fallar completamente, solo registrar advertencia y continuar
+        Else
+            Call fun801_LogMessage("VALIDACION - Carpeta existe y es accesible: " & strRutaLimpia, _
+                False, "", strFuncion)
+        End If
+        
+        ' Limpiar objeto
+        Set objFSO = Nothing
+    End If
+    
+    '--------------------------------------------------------------------------
+    ' 7. Logging detallado de la operación realizada
+    '--------------------------------------------------------------------------
+    lngLineaError = 90
+    
+    ' Registrar éxito completo con detalles para debugging y auditoría
+    Call fun801_LogMessage("EXITO COMPLETO - " & strMetodoUsado & " obtenida exitosamente. " & _
+        "Tipo solicitado: " & Chr(34) & strTipoOrigen & Chr(34) & ", " & _
+        "Tipo normalizado: " & Chr(34) & strTipoNormalizado & Chr(34) & ", " & _
+        "Ruta final: " & Chr(34) & strRutaLimpia & Chr(34), _
+        False, "", strFuncion)
+    
+    '--------------------------------------------------------------------------
+    ' 8. Retorno del resultado final normalizado
+    '--------------------------------------------------------------------------
+    lngLineaError = 100
+    fun808_ObtenerCarpetaSistema = strRutaLimpia
+    
+    Exit Function
+
+GestorErrores:
+    '--------------------------------------------------------------------------
+    ' Manejo exhaustivo de errores con información detallada
+    '--------------------------------------------------------------------------
+    
+    ' Limpiar objetos en caso de error
+    On Error Resume Next
+    Set objFSO = Nothing
+    On Error GoTo 0
+    
+    ' Construir mensaje de error detallado y completo
+    strMensajeError = "ERROR CRITICO en " & strFuncion & vbCrLf & _
+                      "Fecha y hora: 2025-06-12 15:19:14 UTC" & vbCrLf & _
+                      "Usuario: david-joaquin-corredera-de-colsa" & vbCrLf & _
+                      "Línea aproximada: " & lngLineaError & vbCrLf & _
+                      "Número de Error: " & Err.Number & vbCrLf & _
+                      "Descripción del Error: " & Err.Description & vbCrLf & _
+                      "Parámetro de entrada original: " & Chr(34) & strTipoOrigen & Chr(34) & vbCrLf & _
+                      "Tipo normalizado: " & Chr(34) & strTipoNormalizado & Chr(34) & vbCrLf & _
+                      "Método utilizado: " & Chr(34) & strMetodoUsado & Chr(34) & vbCrLf & _
+                      "Ruta obtenida (cruda): " & Chr(34) & strRutaObtenida & Chr(34) & vbCrLf & _
+                      "Ruta limpia (procesada): " & Chr(34) & strRutaLimpia & Chr(34) & vbCrLf & _
+                      "Validar carpeta habilitado: " & blnValidarCarpeta & vbCrLf & _
+                      "Compatibilidad: Excel 97/2003/2007/365, OneDrive/SharePoint/Teams"
+    
+    ' Registrar error completo en el log del sistema
+    Call fun801_LogMessage(strMensajeError, True, "", strFuncion)
+    
+    ' Para debugging en desarrollo (solo visible en VBA Editor)
+    Debug.Print strMensajeError
+    
+    ' Retornar cadena vacía para indicar fallo
+    fun808_ObtenerCarpetaSistema = ""
+End Function

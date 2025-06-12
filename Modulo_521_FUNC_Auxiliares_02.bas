@@ -1,165 +1,8 @@
 Attribute VB_Name = "Modulo_521_FUNC_Auxiliares_02"
 
+
+
 Option Explicit
-
-Public Function fun802_SheetExists(ByVal strSheetName As String) As Boolean
-    
-    '========================================================================
-    ' FUNCION AUXILIAR: fun802_SheetExists
-    ' Descripcion : Verifica de forma segura si existe una hoja (worksheet)
-    '               con el nombre indicado en el libro actual
-    '               antes de entrar a trabajar con ella
-    ' Fecha       : 2025-06-01
-    ' Retorna     : Boolean
-    '========================================================================
-    
-    On Error GoTo ErrorHandler
-    Dim ws As Worksheet
-    fun802_SheetExists = False
-    Set ws = ThisWorkbook.Worksheets(strSheetName)
-    If Not ws Is Nothing Then
-        fun802_SheetExists = True
-    End If
-    Exit Function
-ErrorHandler:
-    fun802_SheetExists = False
-End Function
-
-Public Function fun811_DetectarThousandsSeparatorLegacy() As String
-
-    ' =============================================================================
-    ' FUNCIÓN AUXILIAR 811: DETECTAR THOUSANDS SEPARATOR (MÉTODO LEGACY)
-    ' =============================================================================
-    ' Fecha: 2025-05-26 17:43:59 UTC
-    ' Descripción: Método alternativo para detectar separador de miles en versiones antiguas
-    ' Parámetros: Ninguno
-    ' Retorna: String (carácter del separador de miles)
-    ' Compatibilidad: Excel 97, 2003
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    ' Variables para detección
-    Dim numeroFormateado As String
-    Dim lineaError As Long
-    
-    lineaError = 1200
-    
-    ' Método alternativo: formatear un número grande y extraer el separador
-    ' Compatible con Excel 97 y versiones antiguas
-    numeroFormateado = Format(1000, "#,##0")
-    
-    lineaError = 1210
-    
-    ' El separador de miles es el segundo carácter en números de 4 dígitos
-    If Len(numeroFormateado) >= 2 Then
-        fun811_DetectarThousandsSeparatorLegacy = Mid(numeroFormateado, 2, 1)
-    Else
-        ' Si no hay separador visible, asumir coma por defecto
-        fun811_DetectarThousandsSeparatorLegacy = ","
-    End If
-    
-    lineaError = 1220
-    
-    Exit Function
-    
-ErrorHandler:
-    ' En caso de error, asumir coma por defecto
-    fun811_DetectarThousandsSeparatorLegacy = ","
-    
-    ' Información detallada del error
-    Dim mensajeError As String
-    mensajeError = "ERROR EN FUNCIÓN: fun811_DetectarThousandsSeparatorLegacy" & vbCrLf & _
-                   "TIPO DE ERROR: " & Err.Number & " - " & Err.Description & vbCrLf & _
-                   "LÍNEA DE ERROR APROXIMADA: " & lineaError & vbCrLf & _
-                   "LÍNEA VBA: " & Erl & vbCrLf & _
-                   "FECHA Y HORA: " & Now()
-    
-    Debug.Print mensajeError
-    
-End Function
-
-
-Public Function fun802_CrearHojaDelimitadores(wb As Workbook, nombreHoja As String) As Worksheet
-
-    ' =============================================================================
-    ' FUNCIÓN AUXILIAR 802: CREAR HOJA DE DELIMITADORES
-    ' =============================================================================
-    ' Fecha: 2025-05-26 18:41:20 UTC
-    ' Usuario: david-joaquin-corredera-de-colsa
-    ' Descripción: Crea una nueva hoja con el nombre especificado y la deja visible
-    ' Parámetros: wb (Workbook), nombreHoja (String)
-    ' Retorna: Worksheet (referencia a la hoja creada, Nothing si error)
-    ' Compatibilidad: Excel 97, 2003, 365, OneDrive, SharePoint, Teams
-    ' =============================================================================
-    
-    On Error GoTo ErrorHandler
-    
-    Dim ws As Worksheet
-    Dim lineaError As Long
-    
-    lineaError = 300
-    
-    ' Verificar parámetros de entrada
-    If wb Is Nothing Or nombreHoja = "" Then
-        Set fun802_CrearHojaDelimitadores = Nothing
-        Exit Function
-    End If
-    
-    lineaError = 310
-    
-    ' Verificar que el libro no esté protegido (importante para entornos cloud)
-    If wb.ProtectStructure Then
-        Set fun802_CrearHojaDelimitadores = Nothing
-        Debug.Print "ERROR: No se puede crear hoja, libro protegido - Función: fun802_CrearHojaDelimitadores - " & Now()
-        Exit Function
-    End If
-    
-    lineaError = 320
-    
-    ' Crear nueva hoja al final del libro (método compatible con todas las versiones)
-    Set ws = wb.Worksheets.Add(After:=wb.Worksheets(wb.Worksheets.Count))
-    
-    lineaError = 330
-    
-    ' Asignar nombre a la hoja
-    ws.Name = nombreHoja
-    
-    lineaError = 340
-    
-    ' Asegurar que la hoja esté visible
-    ws.Visible = xlSheetVisible
-    
-    lineaError = 350
-    
-    ' Configuración adicional para compatibilidad con entornos cloud
-    If ws.ProtectContents Then
-        ws.Unprotect
-    End If
-    
-    ' Retornar referencia a la hoja creada
-    Set fun802_CrearHojaDelimitadores = ws
-    
-    lineaError = 360
-    
-    Exit Function
-    
-ErrorHandler:
-    Set fun802_CrearHojaDelimitadores = Nothing
-    
-    ' Información detallada del error
-    Dim mensajeError As String
-    mensajeError = "ERROR EN FUNCIÓN: fun802_CrearHojaDelimitadores" & vbCrLf & _
-                   "TIPO DE ERROR: " & Err.Number & " - " & Err.Description & vbCrLf & _
-                   "LÍNEA DE ERROR APROXIMADA: " & lineaError & vbCrLf & _
-                   "LÍNEA VBA: " & Erl & vbCrLf & _
-                   "PARÁMETRO nombreHoja: " & nombreHoja & vbCrLf & _
-                   "FECHA Y HORA: " & Now()
-    
-    Debug.Print mensajeError
-    
-End Function
-
 
 Public Function fun803_HacerHojaVisible(ws As Worksheet) As Boolean
     ' =============================================================================
@@ -753,161 +596,61 @@ Public Sub fun807_MostrarErrorDetallado(ByVal strFuncion As String, ByVal strTip
     
 End Sub
 
-
-
-Public Function fun803_ObtenerCarpetaExcelActual() As String
-
+Public Function fun809_ValidarCarpeta(ByVal strCarpeta As String) As Boolean
+    
     '******************************************************************************
-    ' FUNCIONES AUXILIARES PARA OBTENCIÓN DE CARPETAS DE RESPALDO
-    ' FECHA CREACIÓN: 2025-06-01
+    ' FUNCION AUXILIAR: fun809_ValidarCarpeta
+    ' FECHA Y HORA DE CREACION: 2025-06-12 15:19:14 UTC
     ' AUTOR: david-joaquin-corredera-de-colsa
-    ' COMPATIBILIDAD: Excel 97, 2003, 365
-    '******************************************************************************
-
-    
-    '--------------------------------------------------------------------------
-    ' Obtiene la carpeta donde está ubicado el archivo Excel actual
-    '--------------------------------------------------------------------------
-    On Error GoTo ErrorHandler
-    
-    Dim strCarpeta As String
-    
-    ' Obtener ruta completa del archivo actual
-    If ThisWorkbook.Path <> "" Then
-        strCarpeta = ThisWorkbook.Path
-    ElseIf ActiveWorkbook.Path <> "" Then
-        strCarpeta = ActiveWorkbook.Path
-    Else
-        strCarpeta = ""
-    End If
-    
-    fun803_ObtenerCarpetaExcelActual = strCarpeta
-    Exit Function
-    
-ErrorHandler:
-    fun803_ObtenerCarpetaExcelActual = ""
-End Function
-
-Public Function fun804_ObtenerCarpetaTemp() As String
-
-    '******************************************************************************
-    ' FUNCIONES AUXILIARES PARA OBTENCIÓN DE CARPETAS DE RESPALDO
-    ' FECHA CREACIÓN: 2025-06-01
-    ' AUTOR: david-joaquin-corredera-de-colsa
-    ' COMPATIBILIDAD: Excel 97, 2003, 365
+    ' DESCRIPCION: Valida si una carpeta existe y es accesible (versión mejorada)
+    ' PARAMETROS: strCarpeta (String) - Ruta de la carpeta a validar
+    ' RETORNO: Boolean - True si la carpeta es válida y existe, False si no
+    ' COMPATIBILIDAD: Excel 97-365, OneDrive/SharePoint/Teams
     '******************************************************************************
     
-    '--------------------------------------------------------------------------
-    ' Obtiene la carpeta de la variable de entorno %TEMP%
-    '--------------------------------------------------------------------------
-    On Error GoTo ErrorHandler
-    
-    Dim strCarpeta As String
-    
-    ' Obtener variable de entorno TEMP (compatible con Excel 97+)
-    strCarpeta = Environ("TEMP")
-    
-    fun804_ObtenerCarpetaTemp = strCarpeta
-    Exit Function
-    
-ErrorHandler:
-    fun804_ObtenerCarpetaTemp = ""
-End Function
-
-Public Function fun805_ObtenerCarpetaTmp() As String
-
-    '******************************************************************************
-    ' FUNCIONES AUXILIARES PARA OBTENCIÓN DE CARPETAS DE RESPALDO
-    ' FECHA CREACIÓN: 2025-06-01
-    ' AUTOR: david-joaquin-corredera-de-colsa
-    ' COMPATIBILIDAD: Excel 97, 2003, 365
-    '******************************************************************************
-
-    '--------------------------------------------------------------------------
-    ' Obtiene la carpeta de la variable de entorno %TMP%
-    '--------------------------------------------------------------------------
-    On Error GoTo ErrorHandler
-    
-    Dim strCarpeta As String
-    
-    ' Obtener variable de entorno TMP (compatible con Excel 97+)
-    strCarpeta = Environ("TMP")
-    
-    fun805_ObtenerCarpetaTmp = strCarpeta
-    Exit Function
-    
-ErrorHandler:
-    fun805_ObtenerCarpetaTmp = ""
-End Function
-
-Public Function fun806_ObtenerCarpetaUserProfile() As String
-
-    '******************************************************************************
-    ' FUNCIONES AUXILIARES PARA OBTENCIÓN DE CARPETAS DE RESPALDO
-    ' FECHA CREACIÓN: 2025-06-01
-    ' AUTOR: david-joaquin-corredera-de-colsa
-    ' COMPATIBILIDAD: Excel 97, 2003, 365
-    '******************************************************************************
-
-    '--------------------------------------------------------------------------
-    ' Obtiene la carpeta de la variable de entorno %USERPROFILE%
-    '--------------------------------------------------------------------------
-    On Error GoTo ErrorHandler
-    
-    Dim strCarpeta As String
-    
-    ' Obtener variable de entorno USERPROFILE (compatible con Excel 97+)
-    strCarpeta = Environ("USERPROFILE")
-    
-    fun806_ObtenerCarpetaUserProfile = strCarpeta
-    Exit Function
-    
-ErrorHandler:
-    fun806_ObtenerCarpetaUserProfile = ""
-End Function
-
-Public Function fun807_ValidarCarpeta(ByVal strCarpeta As String) As Boolean
-
-    '******************************************************************************
-    ' FUNCIONES AUXILIARES PARA OBTENCIÓN DE CARPETAS DE RESPALDO
-    ' FECHA CREACIÓN: 2025-06-01
-    ' AUTOR: david-joaquin-corredera-de-colsa
-    ' COMPATIBILIDAD: Excel 97, 2003, 365
-    '******************************************************************************
-    
-    '--------------------------------------------------------------------------
-    ' Valida si una carpeta existe y es accesible
-    '--------------------------------------------------------------------------
     On Error GoTo ErrorHandler
     
     Dim objFSO As Object
-    Dim blnResultado As Boolean
+    Dim strCarpetaLimpia As String
     
-    blnResultado = False
+    ' Inicialización
+    fun809_ValidarCarpeta = False
     
-    ' Verificar que la carpeta no esté vacía
+    ' Verificar que la cadena no esté vacía o sea nula
     If Len(Trim(strCarpeta)) = 0 Then
-        GoTo ErrorHandler
+        Exit Function
     End If
     
-    ' Crear objeto FileSystemObject (compatible con Excel 97+)
+    ' Limpiar la ruta eliminando espacios
+    strCarpetaLimpia = Trim(strCarpeta)
+    
+    ' Verificar longitud mínima razonable (ej: C:\)
+    If Len(strCarpetaLimpia) < 3 Then
+        Exit Function
+    End If
+    
+    ' Crear objeto FileSystemObject (compatible con Excel 97-365)
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     
-    ' Verificar si la carpeta existe y es accesible
-    If objFSO.FolderExists(strCarpeta) Then
-        blnResultado = True
+    ' Verificar si la carpeta existe físicamente
+    If objFSO.FolderExists(strCarpetaLimpia) Then
+        fun809_ValidarCarpeta = True
     End If
     
+    ' Limpiar objeto
     Set objFSO = Nothing
-    fun807_ValidarCarpeta = blnResultado
     Exit Function
     
 ErrorHandler:
+    ' En caso de error, asumir que no es válida
+    fun809_ValidarCarpeta = False
+    
+    ' Limpiar objeto en caso de error
+    On Error Resume Next
     Set objFSO = Nothing
-    fun807_ValidarCarpeta = False
+    On Error GoTo 0
+    
 End Function
-
-
 
 Public Function F005_Proteger_Hoja_Contra_Escritura(ByVal vNombreHoja As String) As Boolean
     '******************************************************************************
@@ -1164,5 +907,59 @@ GestorErrores:
     ' Retornar False para indicar error
     F005_Proteger_Hoja_Contra_Escritura = False
 End Function
+
+Public Sub fun809_Crear_Enlace_Hoja(vHojaDestino As Worksheet, vFila As Integer, vColumna As Integer, vNombreHoja As String)
+
+    ' =============================================================================
+    ' SUB AUXILIAR: fun809_Crear_Enlace_Hoja
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Crea un hyperlink a una hoja especifica (compatible Excel 97)
+    ' PARAMETROS: vHojaDestino, vFila, vColumna, vNombreHoja
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Dim vCelda As Range
+    Dim vDireccion As String
+    
+    Set vCelda = vHojaDestino.Cells(vFila, vColumna)
+    vDireccion = "'" & vNombreHoja & "'!A1"
+    
+    ' Metodo compatible con Excel 97
+    vCelda.Value = "Ir a " & vNombreHoja
+    vCelda.Font.ColorIndex = 5 ' Azul
+    vCelda.Font.Underline = xlUnderlineStyleSingle
+    
+    ' Crear hyperlink (Excel 97+ compatible)
+    vHojaDestino.Hyperlinks.Add Anchor:=vCelda, Address:="", SubAddress:=vDireccion, TextToDisplay:="Ir a " & vNombreHoja
+    
+    Exit Sub
+    
+ErrorHandler:
+    ' Si falla el hyperlink, al menos mostrar el texto
+    vCelda.Value = vNombreHoja
+    
+End Sub
+
+Public Function fun808_Obtener_Hoja_Inventario() As Worksheet
+    
+    ' =============================================================================
+    ' FUNCION AUXILIAR: fun808_Obtener_Hoja_Inventario
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Obtiene referencia a la hoja de inventario
+    ' RETORNO: Worksheet (objeto hoja o Nothing si error)
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Set fun808_Obtener_Hoja_Inventario = ThisWorkbook.Worksheets("01_Inventario")
+    Exit Function
+    
+ErrorHandler:
+    Set fun808_Obtener_Hoja_Inventario = Nothing
+    
+End Function
+
+
 
 

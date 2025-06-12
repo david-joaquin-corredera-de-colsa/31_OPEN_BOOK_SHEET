@@ -1,4 +1,5 @@
 Attribute VB_Name = "Modulo_021_Gestion_Fecha_ISO"
+
 Option Explicit
 Public Function fun830_ObtenerFechaHoraActual() As String
     
@@ -236,7 +237,7 @@ Public Function fun831_CalcularDuracionTarea(ByVal strFechaInicio As String, _
     Dim dblDiferenciaTotal As Double
     
     ' Variables para componentes de fecha inicio
-    Dim intAñoInicio As Integer
+    Dim intAnoInicio As Integer
     Dim intMesInicio As Integer
     Dim intDiaInicio As Integer
     Dim intHoraInicio As Integer
@@ -244,7 +245,7 @@ Public Function fun831_CalcularDuracionTarea(ByVal strFechaInicio As String, _
     Dim intSegundoInicio As Integer
     
     ' Variables para componentes de fecha fin
-    Dim intAñoFin As Integer
+    Dim intAnoFin As Integer
     Dim intMesFin As Integer
     Dim intDiaFin As Integer
     Dim intHoraFin As Integer
@@ -331,7 +332,7 @@ Public Function fun831_CalcularDuracionTarea(ByVal strFechaInicio As String, _
     '--------------------------------------------------------------------------
     lngLineaError = 60
     ' Extraer componentes de fecha inicio
-    intAñoInicio = CInt(Mid(strFechaInicio, 1, 4))      ' Posición 1-4: año
+    intAnoInicio = CInt(Mid(strFechaInicio, 1, 4))      ' Posición 1-4: Ano
     intMesInicio = CInt(Mid(strFechaInicio, 5, 2))      ' Posición 5-6: mes
     intDiaInicio = CInt(Mid(strFechaInicio, 7, 2))      ' Posición 7-8: día
     intHoraInicio = CInt(Mid(strFechaInicio, 10, 2))    ' Posición 10-11: hora
@@ -339,7 +340,7 @@ Public Function fun831_CalcularDuracionTarea(ByVal strFechaInicio As String, _
     intSegundoInicio = CInt(Mid(strFechaInicio, 14, 2)) ' Posición 14-15: segundo
     
     ' Extraer componentes de fecha fin
-    intAñoFin = CInt(Mid(strFechaFin, 1, 4))
+    intAnoFin = CInt(Mid(strFechaFin, 1, 4))
     intMesFin = CInt(Mid(strFechaFin, 5, 2))
     intDiaFin = CInt(Mid(strFechaFin, 7, 2))
     intHoraFin = CInt(Mid(strFechaFin, 10, 2))
@@ -351,11 +352,11 @@ Public Function fun831_CalcularDuracionTarea(ByVal strFechaInicio As String, _
     '--------------------------------------------------------------------------
     lngLineaError = 70
     ' Construir fecha inicio
-    dtFechaInicio = DateSerial(intAñoInicio, intMesInicio, intDiaInicio) + _
+    dtFechaInicio = DateSerial(intAnoInicio, intMesInicio, intDiaInicio) + _
                     TimeSerial(intHoraInicio, intMinutoInicio, intSegundoInicio)
     
     ' Construir fecha fin
-    dtFechaFin = DateSerial(intAñoFin, intMesFin, intDiaFin) + _
+    dtFechaFin = DateSerial(intAnoFin, intMesFin, intDiaFin) + _
                  TimeSerial(intHoraFin, intMinutoFin, intSegundoFin)
     
     '--------------------------------------------------------------------------
@@ -475,11 +476,11 @@ GestorErrores:
                       "Fecha Fin convertida: " & CStr(dtFechaFin) & vbCrLf & _
                       "Fecha Inicio legible: " & strFechaInicioLegible & vbCrLf & _
                       "Fecha Fin legible: " & strFechaFinLegible & vbCrLf & _
-                      "Componentes Inicio - Año: " & CStr(intAñoInicio) & _
+                      "Componentes Inicio - Ano: " & CStr(intAnoInicio) & _
                       ", Mes: " & CStr(intMesInicio) & ", Día: " & CStr(intDiaInicio) & _
                       ", Hora: " & CStr(intHoraInicio) & ", Min: " & CStr(intMinutoInicio) & _
                       ", Seg: " & CStr(intSegundoInicio) & vbCrLf & _
-                      "Componentes Fin - Año: " & CStr(intAñoFin) & _
+                      "Componentes Fin - Ano: " & CStr(intAnoFin) & _
                       ", Mes: " & CStr(intMesFin) & ", Día: " & CStr(intDiaFin) & _
                       ", Hora: " & CStr(intHoraFin) & ", Min: " & CStr(intMinutoFin) & _
                       ", Seg: " & CStr(intSegundoFin) & vbCrLf & _
@@ -574,7 +575,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     On Error GoTo ErrorHandler
     
     ' Variables para extracción de componentes
-    Dim strAño As String
+    Dim strAno As String
     Dim strMes As String
     Dim strDia As String
     Dim strHora As String
@@ -582,7 +583,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     Dim strSegundo As String
     
     ' Variables para conversión
-    Dim intAño As Integer
+    Dim intAno As Integer
     Dim intMes As Integer
     Dim intDia As Integer
     Dim intHora As Integer
@@ -598,7 +599,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     End If
     
     ' Extraer componentes de fecha
-    strAño = Mid(strFechaHora, 1, 4)        ' Posición 1-4: año
+    strAno = Mid(strFechaHora, 1, 4)        ' Posición 1-4: Ano
     strMes = Mid(strFechaHora, 5, 2)        ' Posición 5-6: mes
     strDia = Mid(strFechaHora, 7, 2)        ' Posición 7-8: día
     
@@ -608,7 +609,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     strSegundo = Mid(strFechaHora, 14, 2)   ' Posición 14-15: segundo
     
     ' Convertir a números
-    intAño = CInt(strAño)
+    intAno = CInt(strAno)
     intMes = CInt(strMes)
     intDia = CInt(strDia)
     intHora = CInt(strHora)
@@ -616,7 +617,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     intSegundo = CInt(strSegundo)
     
     ' Validar rangos lógicos
-    If intAño < 1900 Or intAño > 3000 Then GoTo ErrorHandler
+    If intAno < 1900 Or intAno > 3000 Then GoTo ErrorHandler
     If intMes < 1 Or intMes > 12 Then GoTo ErrorHandler
     If intDia < 1 Or intDia > 31 Then GoTo ErrorHandler
     If intHora < 0 Or intHora > 23 Then GoTo ErrorHandler
@@ -624,7 +625,7 @@ Public Function fun833_ConvertirStringADate(ByVal strFechaHora As String) As Dat
     If intSegundo < 0 Or intSegundo > 59 Then GoTo ErrorHandler
     
     ' Crear fecha usando DateSerial y TimeSerial (compatible con todas las versiones)
-    dtResultado = DateSerial(intAño, intMes, intDia) + _
+    dtResultado = DateSerial(intAno, intMes, intDia) + _
                   TimeSerial(intHora, intMinuto, intSegundo)
     
     fun833_ConvertirStringADate = dtResultado
@@ -701,4 +702,251 @@ Public Function fun835_ExtraerHoraDeCadena(ByVal strFechaHora As String) As Stri
 ErrorHandler:
     fun835_ExtraerHoraDeCadena = ""
 End Function
+
+
+Public Function fun802_CrearHojaDelimitadores(wb As Workbook, nombreHoja As String) As Worksheet
+
+    ' =============================================================================
+    ' FUNCIÓN AUXILIAR 802: CREAR HOJA DE DELIMITADORES
+    ' =============================================================================
+    ' Fecha: 2025-05-26 18:41:20 UTC
+    ' Usuario: david-joaquin-corredera-de-colsa
+    ' Descripción: Crea una nueva hoja con el nombre especificado y la deja visible
+    ' Parámetros: wb (Workbook), nombreHoja (String)
+    ' Retorna: Worksheet (referencia a la hoja creada, Nothing si error)
+    ' Compatibilidad: Excel 97, 2003, 365, OneDrive, SharePoint, Teams
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Dim ws As Worksheet
+    Dim lineaError As Long
+    
+    lineaError = 300
+    
+    ' Verificar parámetros de entrada
+    If wb Is Nothing Or nombreHoja = "" Then
+        Set fun802_CrearHojaDelimitadores = Nothing
+        Exit Function
+    End If
+    
+    lineaError = 310
+    
+    ' Verificar que el libro no esté protegido (importante para entornos cloud)
+    If wb.ProtectStructure Then
+        Set fun802_CrearHojaDelimitadores = Nothing
+        Debug.Print "ERROR: No se puede crear hoja, libro protegido - Función: fun802_CrearHojaDelimitadores - " & Now()
+        Exit Function
+    End If
+    
+    lineaError = 320
+    
+    ' Crear nueva hoja al final del libro (método compatible con todas las versiones)
+    Set ws = wb.Worksheets.Add(After:=wb.Worksheets(wb.Worksheets.Count))
+    
+    lineaError = 330
+    
+    ' Asignar nombre a la hoja
+    ws.Name = nombreHoja
+    
+    lineaError = 340
+    
+    ' Asegurar que la hoja esté visible
+    ws.Visible = xlSheetVisible
+    
+    lineaError = 350
+    
+    ' Configuración adicional para compatibilidad con entornos cloud
+    If ws.ProtectContents Then
+        ws.Unprotect
+    End If
+    
+    ' Retornar referencia a la hoja creada
+    Set fun802_CrearHojaDelimitadores = ws
+    
+    lineaError = 360
+    
+    Exit Function
+    
+ErrorHandler:
+    Set fun802_CrearHojaDelimitadores = Nothing
+    
+    ' Información detallada del error
+    Dim mensajeError As String
+    mensajeError = "ERROR EN FUNCIÓN: fun802_CrearHojaDelimitadores" & vbCrLf & _
+                   "TIPO DE ERROR: " & Err.Number & " - " & Err.Description & vbCrLf & _
+                   "LÍNEA DE ERROR APROXIMADA: " & lineaError & vbCrLf & _
+                   "LÍNEA VBA: " & Erl & vbCrLf & _
+                   "PARÁMETRO nombreHoja: " & nombreHoja & vbCrLf & _
+                   "FECHA Y HORA: " & Now()
+    
+    Debug.Print mensajeError
+    
+End Function
+
+
+Public Function fun802_SheetExists(ByVal strSheetName As String) As Boolean
+    
+    '========================================================================
+    ' FUNCION AUXILIAR: fun802_SheetExists
+    ' Descripcion : Verifica de forma segura si existe una hoja (worksheet)
+    '               con el nombre indicado en el libro actual
+    '               antes de entrar a trabajar con ella
+    ' Fecha       : 2025-06-01
+    ' Retorna     : Boolean
+    '========================================================================
+    
+    On Error GoTo ErrorHandler
+    Dim ws As Worksheet
+    fun802_SheetExists = False
+    Set ws = ThisWorkbook.Worksheets(strSheetName)
+    If Not ws Is Nothing Then
+        fun802_SheetExists = True
+    End If
+    Exit Function
+ErrorHandler:
+    fun802_SheetExists = False
+End Function
+
+Public Function fun811_DetectarThousandsSeparatorLegacy() As String
+
+    ' =============================================================================
+    ' FUNCIÓN AUXILIAR 811: DETECTAR THOUSANDS SEPARATOR (MÉTODO LEGACY)
+    ' =============================================================================
+    ' Fecha: 2025-05-26 17:43:59 UTC
+    ' Descripción: Método alternativo para detectar separador de miles en versiones antiguas
+    ' Parámetros: Ninguno
+    ' Retorna: String (carácter del separador de miles)
+    ' Compatibilidad: Excel 97, 2003
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    ' Variables para detección
+    Dim numeroFormateado As String
+    Dim lineaError As Long
+    
+    lineaError = 1200
+    
+    ' Método alternativo: formatear un número grande y extraer el separador
+    ' Compatible con Excel 97 y versiones antiguas
+    numeroFormateado = Format(1000, "#,##0")
+    
+    lineaError = 1210
+    
+    ' El separador de miles es el segundo carácter en números de 4 dígitos
+    If Len(numeroFormateado) >= 2 Then
+        fun811_DetectarThousandsSeparatorLegacy = Mid(numeroFormateado, 2, 1)
+    Else
+        ' Si no hay separador visible, asumir coma por defecto
+        fun811_DetectarThousandsSeparatorLegacy = ","
+    End If
+    
+    lineaError = 1220
+    
+    Exit Function
+    
+ErrorHandler:
+    ' En caso de error, asumir coma por defecto
+    fun811_DetectarThousandsSeparatorLegacy = ","
+    
+    ' Información detallada del error
+    Dim mensajeError As String
+    mensajeError = "ERROR EN FUNCIÓN: fun811_DetectarThousandsSeparatorLegacy" & vbCrLf & _
+                   "TIPO DE ERROR: " & Err.Number & " - " & Err.Description & vbCrLf & _
+                   "LÍNEA DE ERROR APROXIMADA: " & lineaError & vbCrLf & _
+                   "LÍNEA VBA: " & Erl & vbCrLf & _
+                   "FECHA Y HORA: " & Now()
+    
+    Debug.Print mensajeError
+    
+End Function
+
+
+Public Function F010_Abrir_Hoja_Inicial() As Integer
+
+    ' =============================================================================
+    ' FUNCION: F010_Abrir_Hoja_Inicial
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Funcion para navegar a la hoja inicial del libro
+    ' PARAMETROS: Ninguno
+    ' RETORNO: Integer (0=exito, >0=error)
+    ' COMPATIBILIDAD: Excel 97-365, OneDrive/SharePoint/Teams
+    ' =============================================================================
+    ' RESUMEN EXHAUSTIVO DE PASOS:
+    ' 1. Configurar la variable vHojaInicial con "00_Ejecutar_Procesos"
+    ' 2. Verificar que el libro de trabajo este disponible
+    ' 3. Buscar la hoja especificada en la coleccion de hojas del libro
+    ' 4. Si la hoja existe, activarla y posicionarse en celda A1
+    ' 5. Si la hoja no existe, retornar codigo de error
+    ' 6. Retornar codigo de resultado
+
+    On Error GoTo ErrorHandler
+    
+    Dim vResultado As Integer
+    Dim vHojaEncontrada As Boolean
+    Dim vContadorHojas As Integer
+    Dim vNombreHojaActual As String
+    Dim vLineaError As Integer
+    
+    vResultado = 0
+    vHojaEncontrada = False
+    vContadorHojas = 0
+    vLineaError = 10
+    
+    ' Paso 1: Configurar la variable vHojaInicial con "00_Ejecutar_Procesos"
+    vHojaInicial = "00_Ejecutar_Procesos"
+    vLineaError = 20
+    
+    ' Paso 2: Verificar que el libro de trabajo este disponible
+    vLineaError = 30
+    If ThisWorkbook Is Nothing Then
+        vResultado = 1001 ' Error: Libro de trabajo no disponible
+        GoTo ErrorHandler
+    End If
+    
+    ' Paso 3: Buscar la hoja especificada en la coleccion de hojas del libro
+    vLineaError = 40
+    For vContadorHojas = 1 To ThisWorkbook.Worksheets.Count
+        vNombreHojaActual = ThisWorkbook.Worksheets(vContadorHojas).Name
+        If StrComp(vNombreHojaActual, vHojaInicial, vbTextCompare) = 0 Then
+            vHojaEncontrada = True
+            Exit For
+        End If
+    Next vContadorHojas
+    
+    ' Paso 4: Si la hoja existe, activarla y posicionarse en celda A1
+    vLineaError = 50
+    If vHojaEncontrada Then
+        ThisWorkbook.Worksheets(vHojaInicial).Activate
+        vLineaError = 55
+        ThisWorkbook.Worksheets(vHojaInicial).Range("A1").Select
+        vResultado = 0 ' Exito
+    Else
+        ' Paso 5: Si la hoja no existe, retornar codigo de error
+        vResultado = 1002 ' Error: Hoja no encontrada
+    End If
+    
+    ' Paso 6: Retornar codigo de resultado
+    F010_Abrir_Hoja_Inicial = vResultado
+    Exit Function
+    
+ErrorHandler:
+    Dim vMensajeError As String
+    vMensajeError = "ERROR en F010_Abrir_Hoja_Inicial" & vbCrLf & _
+                   "Linea aproximada: " & vLineaError & vbCrLf & _
+                   "Numero de Error: " & Err.Number & vbCrLf & _
+                   "Descripcion: " & Err.Description & vbCrLf & _
+                   "Hoja objetivo: " & vHojaInicial
+    
+    MsgBox vMensajeError, vbCritical, "Error F010_Abrir_Hoja_Inicial"
+    
+    If vResultado = 0 Then
+        vResultado = 9999 ' Error no especificado
+    End If
+    
+    F010_Abrir_Hoja_Inicial = vResultado
+    
+End Function
+
 

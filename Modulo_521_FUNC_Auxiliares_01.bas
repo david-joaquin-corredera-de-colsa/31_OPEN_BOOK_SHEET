@@ -1,6 +1,6 @@
 Attribute VB_Name = "Modulo_521_FUNC_Auxiliares_01"
-Option Explicit
 
+Option Explicit
 
 Public Function fun801_LogMessage(ByVal strMessage As String, _
                                 Optional ByVal blnIsError As Boolean = False, _
@@ -164,9 +164,6 @@ GestorErrores:
     fun801_LogMessage = False
 End Function
 
-
-
-
 Public Function F002_Crear_Hoja(ByVal strNombreHoja As String) As Boolean
 
     '******************************************************************************
@@ -248,8 +245,6 @@ GestorErrores:
     F002_Crear_Hoja = False
 End Function
 
-
-
 Public Function fun801_LimpiarHoja(ByVal strNombreHoja As String) As Boolean
     
     '******************************************************************************
@@ -284,7 +279,6 @@ Public Function fun802_SeleccionarArchivo(ByVal strPrompt As String) As String
     ' FUNCIÓN: fun802_SeleccionarArchivo (VERSIÓN MEJORADA)
     ' AUTOR: david-joaquin-corredera-de-colsa
     ' FECHA MODIFICACIÓN: 2025-06-01
-    '
     ' PROPÓSITO:
     ' Proporciona una interfaz de usuario intuitiva para seleccionar archivos de
     ' texto (TXT y CSV) con sistema de carpetas de respaldo automático.
@@ -324,21 +318,20 @@ Public Function fun802_SeleccionarArchivo(ByVal strPrompt As String) As String
         
         Select Case intIntentoActual
             Case 1: ' Carpeta del archivo Excel actual
-                strCarpetaActual = fun803_ObtenerCarpetaExcelActual()
+                strCarpetaActual = fun808_ObtenerCarpetaSistema("EXCEL_PATH_CURRENT_BOOK")
                 
             Case 2: ' Variable de entorno %TEMP%
-                strCarpetaActual = fun804_ObtenerCarpetaTemp()
+                strCarpetaActual = fun808_ObtenerCarpetaSistema("TEMP")
                 
             Case 3: ' Variable de entorno %TMP%
-                strCarpetaActual = fun805_ObtenerCarpetaTmp()
+                strCarpetaActual = fun808_ObtenerCarpetaSistema("TMP")
                 
             Case 4: ' Variable de entorno %USERPROFILE%
-                strCarpetaActual = fun806_ObtenerCarpetaUserProfile()
+                strCarpetaActual = fun808_ObtenerCarpetaSistema("USERPROFILE")
         End Select
         
         ' Verificar si la carpeta es válida y accesible
-        If fun807_ValidarCarpeta(strCarpetaActual) Then
-            blnCarpetaValida = True
+        If fun809_ValidarCarpeta(strCarpetaActual) Then blnCarpetaValida = True
             strCarpetaInicial = strCarpetaActual
         Else
             intIntentoActual = intIntentoActual + 1
@@ -397,7 +390,6 @@ Public Function fun803_ImportarArchivo(ByRef wsDestino As Worksheet, _
     '******************************************************************************
     ' FUNCIÓN: fun803_ImportarArchivo
     ' AUTOR: david-joaquin-corredera-de-colsa
-    '
     ' PROPÓSITO:
     ' Importa el contenido completo de archivos de texto plano (TXT/CSV) línea por
     ' línea hacia una hoja de Excel específica, colocando cada línea del archivo
@@ -481,14 +473,12 @@ GestorErrores:
     fun803_ImportarArchivo = False
 End Function
 
-
 Public Function fun804_DetectarRangoDatos(ByRef ws As Worksheet, _
                                          ByRef lngLineaInicial As Long, _
                                          ByRef lngLineaFinal As Long) As Boolean
     '******************************************************************************
     ' FUNCIÓN: fun804_DetectarRangoDatos
     ' AUTOR: david-joaquin-corredera-de-colsa
-    '
     ' PROPÓSITO:
     ' Detecta automáticamente el rango exacto de datos en una columna específica
     ' de una hoja de cálculo, identificando la primera y última fila que contienen
@@ -542,9 +532,6 @@ GestorErrores:
     lngLineaFinal = 0
     fun804_DetectarRangoDatos = False
 End Function
-
-
-
 
 Public Function fun801_VerificarExistenciaHoja(wb As Workbook, nombreHoja As String) As Boolean
     ' =============================================================================
@@ -601,8 +588,6 @@ ErrorHandler:
     
 End Function
 
-
-
 Public Sub fun804_LimpiarContenidoHoja(ws As Worksheet)
     
     ' =============================================================================
@@ -655,7 +640,6 @@ ErrorHandler:
     Debug.Print mensajeError
     
 End Sub
-
 
 Public Function fun805_DetectarUseSystemSeparators() As String
     
@@ -716,7 +700,6 @@ ErrorHandler:
     
 End Function
 
-
 Public Function fun806_DetectarDecimalSeparator() As String
 
     ' =============================================================================
@@ -757,7 +740,6 @@ ErrorHandler:
     Debug.Print mensajeError
     
 End Function
-
 
 Public Function fun807_DetectarThousandsSeparator() As String
     
@@ -800,10 +782,6 @@ ErrorHandler:
     
 End Function
 
-
-
-
-
 Public Function fun809_DetectarUseSystemSeparatorsLegacy() As String
     ' =============================================================================
     ' FUNCIÓN AUXILIAR 809: DETECTAR USE SYSTEM SEPARATORS (MÉTODO LEGACY)
@@ -824,8 +802,7 @@ Public Function fun809_DetectarUseSystemSeparatorsLegacy() As String
     
     lineaError = 1000
     
-    ' Obtener separador decimal del sistema (Windows)
-    ' Método compatible con Excel 97 y 2003
+    ' Obtener separador decimal del sistema (Windows) ' Método compatible con Excel 97 y 2003
     separadorSistema = Mid(CStr(1.1), 2, 1)
     
     lineaError = 1010
@@ -861,7 +838,6 @@ ErrorHandler:
     Debug.Print mensajeError
     
 End Function
-
 
 Public Function fun810_DetectarDecimalSeparatorLegacy() As String
     ' =============================================================================
@@ -915,4 +891,109 @@ ErrorHandler:
     Debug.Print mensajeError
     
 End Function
+
+
+Public Sub fun804_Aplicar_Formato_Inventario_Fila(vHojaInventario As Worksheet, vFila As Integer, vEsVisible As Boolean)
+
+    ' =============================================================================
+    ' FUNCION AUXILIAR: fun804_Aplicar_Formato_Inventario_Fila
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Aplica formato a una fila del inventario segun visibilidad
+    ' PARAMETROS: vHojaInventario (Worksheet), vFila (Integer), vEsVisible (Boolean)
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Dim vRangoFila As Range
+    
+    ' Definir rango de la fila (columnas 2 a 4)
+    Set vRangoFila = vHojaInventario.Range("B" & vFila & ":D" & vFila)
+    
+    If vEsVisible Then
+        ' Fila visible: sin color de fondo
+        vRangoFila.Interior.ColorIndex = xlNone
+        vHojaInventario.Cells(vFila, 4).Value = ">> visible <<"
+    Else
+        ' Fila oculta: fondo gris medio
+        vRangoFila.Interior.Color = RGB(128, 128, 128)
+        vHojaInventario.Cells(vFila, 4).Value = "OCULTA"
+    End If
+    
+    Exit Sub
+    
+ErrorHandler:
+    ' No mostrar error, simplemente continuar
+    
+End Sub
+
+Public Function fun805_Es_Hoja_Protegida(vNombreHoja As String) As Boolean
+    
+    ' =============================================================================
+    ' FUNCION AUXILIAR: fun805_Es_Hoja_Protegida
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Verifica si una hoja esta en la lista de hojas protegidas
+    ' PARAMETROS: vNombreHoja (String)
+    ' RETORNO: Boolean (True=protegida, False=no protegida)
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Dim vHojasProtegidas(1 To 6) As String
+    Dim i As Integer
+    
+    ' Lista de hojas protegidas
+    vHojasProtegidas(1) = "00_Ejecutar_Procesos"
+    vHojasProtegidas(2) = "01_Inventario"
+    vHojasProtegidas(3) = "05_Username"
+    vHojasProtegidas(4) = "06_Delimitadores_Originales"
+    vHojasProtegidas(5) = "09_Report_PL"
+    vHojasProtegidas(6) = "10_Report_PL_AH"
+    
+    fun805_Es_Hoja_Protegida = False
+    
+    For i = 1 To 6
+        If StrComp(vNombreHoja, vHojasProtegidas(i), vbTextCompare) = 0 Then
+            fun805_Es_Hoja_Protegida = True
+            Exit Function
+        End If
+    Next i
+    
+    Exit Function
+    
+ErrorHandler:
+    fun805_Es_Hoja_Protegida = False
+    
+End Function
+
+Public Sub fun806_Eliminar_Hoja_Segura(vNombreHoja As String)
+    
+    ' =============================================================================
+    ' SUB AUXILIAR: fun806_Eliminar_Hoja_Segura
+    ' FECHA: 2025-06-03 15:18:26 UTC
+    ' DESCRIPCION: Elimina una hoja de forma segura con control de errores
+    ' PARAMETROS: vNombreHoja (String)
+    ' =============================================================================
+    
+    On Error GoTo ErrorHandler
+    
+    Dim vAlertas As Boolean
+    
+    ' Desactivar alertas para evitar confirmaciones
+    vAlertas = Application.DisplayAlerts
+    Application.DisplayAlerts = False
+    
+    ' Eliminar la hoja
+    ThisWorkbook.Worksheets(vNombreHoja).Delete
+    
+    ' Restaurar alertas
+    Application.DisplayAlerts = vAlertas
+    
+    Exit Sub
+    
+ErrorHandler:
+    Application.DisplayAlerts = vAlertas
+    ' No mostrar error, simplemente continuar
+    
+End Sub
+
 
