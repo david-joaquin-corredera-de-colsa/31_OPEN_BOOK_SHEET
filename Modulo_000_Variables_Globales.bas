@@ -11,7 +11,7 @@ Option Explicit
 '******************************************************************************
 
 ' Constante para version de la Macro
-Public Const CONST_MACRO_VERSION As String = "Macro - Version 20250510 - 065125"
+Public Const CONST_MACRO_VERSION As String = "Macro - Version 20250613 - 2359"
 
 ' Constante para Scenario Admitido
 Public Const CONST_ESCENARIO_ADMITIDO As String = "BUDGET_OS"
@@ -20,10 +20,15 @@ Public Const CONST_ESCENARIO_ADMITIDO As String = "BUDGET_OS"
 Public Const CONST_ULTIMO_MES_DE_CARGA As String = "M12"
 
 ' Constante numero de hojas historicas visibles
-Public Const CONS_NUM_HOJAS_HCAS_VISIBLES_ENVIO As Integer = 5
+Public Const CONST_NUM_HOJAS_HCAS_VISIBLES_ENVIO As Integer = 5
 
+' Constantes para el borrado de hojas antiguas y no deseadas
+Public Const CONST_NUM_HOJAS_HCAS_IMPORT_TARGET As Integer = CONST_NUM_HOJAS_HCAS_VISIBLES_ENVIO      'Este numero normalmente lo fijamos a CONST_NUM_HOJAS_HCAS_VISIBLES_ENVIO = 5
+Public Const CONST_BORRAR_OTRAS_HOJAS_PREFIJO_00 As Boolean = True
+Public Const CONST_BORRAR_OTRAS_HOJAS_PREFIJO_IMPORT As Boolean = True
+Public Const CONST_BORRAR_HOJAS_SIN_PREFIJOS_00_IMPORT As Boolean = True
 
-' Constante para columna de la Enity
+' Constante para columna de la Entity en la hoja de datos importados/envio/comprobacion
 Public Const CONST_COLUMNA_ENTITY As Integer = 4
 
 ' Constantes para mostrar o no mensajes durante la ejecución
@@ -32,7 +37,7 @@ Public Const CONST_MOSTRAR_MENSAJES_HOJAS_CREADAS As Boolean = False
 ' Constantes para control de errores
 Public Const ERROR_BASE_IMPORT As Long = vbObjectError + 1000
 
-' Constantes para nombres de hojas
+' Constantes para nombres de HOJAS TECNICAS
 Public Const CONST_HOJA_EJECUTAR_PROCESOS As String = "00_Ejecutar_Procesos"
 Public Const CONST_HOJA_INVENTARIO As String = "01_Inventario"
 Public Const CONST_HOJA_LOG As String = "02_Log"
@@ -41,7 +46,30 @@ Public Const CONST_HOJA_DELIMITADORES_ORIGINALES As String = "06_Delimitadores_O
 Public Const CONST_HOJA_REPORT_PL As String = "09_Report_PL"
 Public Const CONST_HOJA_REPORT_PL_AH As String = "10_Report_PL_AH"
 
-' Constantes para posicion dimensiones a "modificar" en hoja Informe PL AdHoc
+' Constantes para elegir si cada HOJAS TECNICA debe quedar Hidden - valores posibles xlSheetVisible = -1 | xlSheetHidden = 0 | xlSheetVeryHidden = 2
+Public Const CONST_HOJA_EJECUTAR_PROCESOS_VISIBLE As Integer = xlSheetVisible
+Public Const CONST_HOJA_INVENTARIO_VISIBLE As Integer = xlSheetVisible
+Public Const CONST_HOJA_LOG_VISIBLE As Integer = xlSheetVisible
+Public Const CONST_HOJA_USERNAME_VISIBLE As Integer = xlSheetHidden
+Public Const CONST_HOJA_DELIMITADORES_ORIGINALES_VISIBLE As Integer = xlSheetHidden
+Public Const CONST_HOJA_REPORT_PL_VISIBLE As Integer = xlSheetVisible
+Public Const CONST_HOJA_REPORT_PL_AH_VISIBLE As Integer = xlSheetHidden
+
+' Constantes para prefijos en los nombres de las HOJAS TECNICAS
+Public Const CONST_PREFIJO_HOJA_IMPORTACION As String = "Import_"
+Public Const CONST_PREFIJO_HOJA_IMPORTACION_WORKING As String = "Import_Working_"
+Public Const CONST_PREFIJO_HOJA_IMPORTACION_ENVIO As String = "Import_Envio_"
+Public Const CONST_PREFIJO_HOJA_IMPORTACION_COMPROBACION As String = "Import_Comprob_"
+Public Const CONST_PREFIJO_HOJA_X_BORRAR_ENVIO_PREVIO As String = "Del_Prev_Envio_"
+
+' Constante para prefijo hoja de backup
+Public Const CONST_PREFIJO_BACKUP_HOJA_PREVIA_ENVIO As String = "BK_"
+
+
+
+' ============================================================================================
+' CONSTANTES GLOBALES PARA POSICION DIMENSIONES A "MODIFICAR" EN HOJA DEL INFORME PL ADHOC
+' ============================================================================================
 ' Constantes para filas:
 Public Const CONST_FILA_SCENARIO As Integer = 1
 Public Const CONST_FILA_YEAR As Integer = 2
@@ -58,39 +86,61 @@ Public Const CONST_COLUMNA_INICIAL_HEADERS As Integer = 3
 Public Const CONST_COLUMNA_FINAL_HEADERS As Integer = 15
 Public Const CONST_COLUMNA_ADICIONAL_HEADERS As Integer = 16
 
-' Constante para hoja de backup
-Public Const CONST_PREFIJO_BACKUP_HOJA_PREVIA_ENVIO As String = "BK_"
 
-
-' Constantes para celdas clave de esas hojas
+' Constantes para designar las celdas clave de la hoja de Username/Password
 Public Const CONST_CELDA_USERNAME As String = "C2"
 Public Const CONST_CELDA_HEADER_USERNAME As String = "B2" 'Contendra la string "Username:"
 Public Const CONST_VALOR_HEADER_USERNAME As String = "Username:" 'Valor que se asigna a la celda anterior
 
-
-' Constantes para etiquetas de procesamiento de líneas (NUEVAS)
+' Constantes para etiquetas de procesamiento de líneas (NUEVAS) en las hojas de importacion/working/comprobacion/envio
 Public Const CONST_TAG_LINEA_TRATADA As String = "Linea_Tratada"
 Public Const CONST_TAG_LINEA_SUMA As String = "Linea_Suma"
 Public Const CONST_TAG_LINEA_REPETIDA As String = "Linea_Repetida"
 
-' Constantes para prefijos enlos nombres de las hojas
-Public Const CONST_PREFIJO_HOJA_IMPORTACION As String = "Import_"
-Public Const CONST_PREFIJO_HOJA_IMPORTACION_WORKING As String = "Import_Working_"
-Public Const CONST_PREFIJO_HOJA_IMPORTACION_ENVIO As String = "Import_Envio_"
-Public Const CONST_PREFIJO_HOJA_IMPORTACION_COMPROBACION As String = "Import_Comprob_"
+' ============================================================================================
+' CONSTANTES GLOBALES PARA POSICION COLUMNAS HOJA INVENTARIO
+' ============================================================================================
+' Constantes para FILAS de hoja INVENTARIO
+Public Const CONST_INVENTARIO_FILA_HEADERS As Integer = 2
+' Constantes para COLUMNAS de hoja INVENTARIO
+Public Const CONST_INVENTARIO_COLUMNA_NOMBRE As Integer = 2
+Public Const CONST_INVENTARIO_COLUMNA_LINK As Integer = 3
+Public Const CONST_INVENTARIO_COLUMNA_VISIBLE As Integer = 4
+Public Const CONST_INVENTARIO_COLUMNA_FICHERO As Integer = 5
+' Constantes para valor HEADERS de hoja INVENTARIO
+Public Const CONST_INVENTARIO_HEADER_NOMBRE As String = "Nombre de la Hoja"
+Public Const CONST_INVENTARIO_HEADER_LINK As String = "Link a la Hoja"
+Public Const CONST_INVENTARIO_HEADER_VISIBLE As String = "Visible/Oculta"
+Public Const CONST_INVENTARIO_HEADER_FICHERO As String = "Fichero Fuente"
+' Constantes para el valor almacenado en la columna VISIBLE: "OCULTA" o ">>> visible <<<"
+Public Const CONST_INVENTARIO_TAG_VISIBLE As String = ">> visible <<"
+Public Const CONST_INVENTARIO_TAG_OCULTA As String = "OCULTA"
 
+' ============================================================================================
+' CONSTANTES GLOBALES PARA POSICION COLUMNAS HOJA LOG
+' ============================================================================================
+' Constantes para FILAS de hoja LOG
+Public Const CONST_LOG_FILA_HEADERS As Integer = 1
+' Constantes para COLUMNAS de hoja LOG
+Public Const CONST_LOG_COLUMNA_FECHA_HORA As Integer = 1
+Public Const CONST_LOG_COLUMNA_USUARIO As Integer = 2
+Public Const CONST_LOG_COLUMNA_TIPO As Integer = 3
+Public Const CONST_LOG_COLUMNA_FICHERO As Integer = 4
+Public Const CONST_LOG_COLUMNA_HOJA As Integer = 5
+Public Const CONST_LOG_COLUMNA_MENSAJE As Integer = 6
+' Constantes para valor HEADERS de hoja LOG
+Public Const CONST_LOG_HEADER_FECHA_HORA As String = "Fecha/Hora"
+Public Const CONST_LOG_HEADER_USUARIO As String = "Usuario"
+Public Const CONST_LOG_HEADER_TIPO As String = "Tipo"
+Public Const CONST_LOG_HEADER_FICHERO As String = "Fichero"
+Public Const CONST_LOG_HEADER_HOJA As String = "Hoja"
+Public Const CONST_LOG_HEADER_MENSAJE As String = "Mensaje"
 
 ' Variable para hoja de envío anterior
 Public gstrPreviaHojaImportacion_Envio As String
 ' Variable para nombre de copia de hoja de envío anterior
 Public gstrPrevDelHojaImportacion_Envio As String
 
-' Variables para hojas base del sistema
-Public gstrHoja_EjecutarProcesos As String
-Public gstrHoja_Inventario As String
-Public gstrHoja_Log As String
-Public gstrHoja_DelimitadoresOriginales As String
-Public gstrHoja_UserName As String
 
 ' Variables para configuración de importación
 Public gstrColumnaInicial_Importacion As String
@@ -120,10 +170,6 @@ Public vLineaFinal_HojaImportacion As Long
 ' =============================================================================
 ' VARIABLES GLOBALES PARA DELIMITADORES DE EXCEL
 ' =============================================================================
-' Fecha y hora de creación: 2025-05-26 17:43:59 UTC
-' Autor: david-joaquin-corredera-de-colsa
-' Descripción: Variables globales para el manejo de delimitadores de Excel
-' =============================================================================
 
 Public vHojaDelimitadoresExcelOriginales As String
 Public vCelda_Header_Excel_UseSystemSeparators As String
@@ -136,18 +182,12 @@ Public vExcel_UseSystemSeparators As String
 Public vExcel_DecimalSeparator As String
 Public vExcel_ThousandsSeparator As String
 
-
 ' =============================================================================
 ' VARIABLES GLOBALES ADICIONALES PARA RESTAURACIÓN DE DELIMITADORES
 ' =============================================================================
-' Fecha y hora de creación: 2025-05-26 18:41:20 UTC
-' Usuario: david-joaquin-corredera-de-colsa
-' Descripción: Variables globales adicionales para restaurar delimitadores originales
-' =============================================================================
 
-Public Const CONST_OCULTAR_REPOSITORIO_DELIMITADORES As Boolean = True 'Poner como True si se desea ocultar la hoja
-Public Const CONST_OCULTAR_HOJA_USERNAME As Boolean = True 'Poner como True si se desea ocultar la hoja
-
+'borrame: Public Const CONST_OCULTAR_REPOSITORIO_DELIMITADORES As Boolean = True 'Poner como True si se desea ocultar la hoja
+'borrame: Public Const CONST_OCULTAR_HOJA_USERNAME As Boolean = True 'Poner como True si se desea ocultar la hoja
 
 ' Variables para celdas que contienen valores originales
 Public vCelda_Valor_Excel_UseSystemSeparators_ValorOriginal As String
@@ -159,11 +199,6 @@ Public vExcel_UseSystemSeparators_ValorOriginal As String
 Public vExcel_DecimalSeparator_ValorOriginal As String
 Public vExcel_ThousandsSeparator_ValorOriginal As String
 
-' AUTOR: Sistema Automatizado
-' VERSIÓN: 1.0
-' COMPATIBILIDAD: Excel 97, 2003, 365, OneDrive, SharePoint, Teams
-' =============================================================================
-
 ' Variables globales para delimitadores
 Public vDelimitadorDecimal_HFM As String
 Public vDelimitadorMiles_HFM As String
@@ -172,16 +207,56 @@ Public vDelimitadorMiles_HFM As String
 ' =============================================================================
 ' VARIABLES GLOBALES PARA DETECCIÓN DE RANGOS POR PALABRAS CLAVE
 ' =============================================================================
-' Fecha y hora de creación: 2025-06-03 03:19:45 UTC
-' Autor: david-joaquin-corredera-de-colsa
-' Descripción: Variables para detectar rangos basados en palabras clave específicas
-' =============================================================================
 
 Public vPalabraClave_PrimeraFila As String
 Public vPalabraClave_PrimeraColumna As String
 Public vPalabraClave_UltimaFila As String
 Public vPalabraClave_UltimaColumna As String
 
+
+'------------------------------------------------------------------------------
+' Procedimiento: VARIABLES Y CONSTANTES PARA LA CONEXION DE SMART VIEW
+'------------------------------------------------------------------------------
+
+' Constantes para la Conexion
+Public Const CONST_PROVIDER As String = "Hyperion Financial Management"
+Public Const CONST_PROVIDER_URL As String = "http://sv3572.logista.local:19000/hfmadf/officeprovider"
+Public Const CONST_SERVER_NAME As String = "HFM"
+Public Const CONST_APPLICATION_NAME As String = "BUCONS1012"
+Public Const CONST_DATABASE_NAME As String = "BUCONS1012"
+Public Const CONST_CONNECTION_FRIENDLY_NAME As String = "Conexion_BUCONS1012_Presupuesto"
+Public Const CONST_DESCRIPTION As String = "Conexion_BUCONS1012_Presupuesto"
+
+' Constantes para los SmartView > Options > Data Options
+Public Const CONST_INDENT_SETTING As Integer = 5
+    Public Const CONST_INDENT_NONE As Integer = 0
+    Public Const CONST_INDENT_CHILD As Integer = 1
+    Public Const CONST_INDENT_PARENT As Integer = 2
+Public Const CONST_SUPPRESS_MISSING_SETTING As Integer = 6
+Public Const CONST_SUPPRESS_ZERO_SETTING As Integer = 7
+Public Const CONST_ENABLE_NOACCESS_MEMBERS_SETTING As Integer = 9
+Public Const CONST_ENABLE_REPEATED_MEMBERS_SETTING As Integer = 10
+Public Const CONST_ENABLE_INVALID_MEMBERS_SETTING As Integer = 11
+Public Const CONST_CELL_DISPLAY_SETTING As Integer = 15
+    Public Const CONST_CELL_DISPLAY_SHOW_DATA As Integer = 0
+    Public Const CONST_CELL_DISPLAY_SHOW_CALC_STATUS As Integer = 1
+    Public Const CONST_CELL_DISPLAY_SHOW_PROCESS_MANAGEMENT As Integer = 2
+Public Const CONST_DISPLAY_MEMBER_NAME_SETTING As Integer = 16
+    Public Const CONST_DISPLAY_NAME_ONLY As Integer = 0
+    Public Const CONST_DISPLAY_AND_DESCRIPTION As Integer = 1
+    Public Const CONST_DISPLAY_DESCRIPTION_ONLY As Integer = 2
+    
+' Variables para las credenciales de SmartView
+Public vUsername As String
+Public vPassword As String
+
+' Constantes para mostrar o no mensajes durante la ejecución
+Public Const CONST_MOSTRAR_MENSAJES_SMARTVIEW_OPTIONS As Boolean = False
+Public Const CONST_MOSTRAR_MENSAJES_SMARTVIEW_CREAR_CONEXION As Boolean = False
+Public Const CONST_MOSTRAR_MENSAJE_FINAL_SMARTVIEW_CREAR_CONEXION As Boolean = True
+
+Public Const CONST_MOSTRAR_MENSAJES_SMARTVIEW_FIJAR_CONEXION_ACTIVA As Boolean = False
+Public Const CONST_MOSTRAR_MENSAJE_FINAL_SMARTVIEW_FIJAR_CONEXION_ACTIVA As Boolean = True
 
 Public Sub fun801_InicializarVariablesGlobales()
 
@@ -221,12 +296,6 @@ Public Sub InitializeGlobalVariables()
     'Inicializar nombre de copia de hoja anterior
     gstrPrevDelHojaImportacion_Envio = ""
     
-    'Nombres de hojas base
-    gstrHoja_EjecutarProcesos = CONST_HOJA_EJECUTAR_PROCESOS
-    gstrHoja_Inventario = CONST_HOJA_INVENTARIO
-    gstrHoja_Log = CONST_HOJA_LOG
-    gstrHoja_DelimitadoresOriginales = CONST_HOJA_DELIMITADORES_ORIGINALES
-    gstrHoja_UserName = CONST_HOJA_USERNAME
         
     'Inicializar variables de líneas
     glngLineaInicial_HojaImportacion = 0
@@ -261,3 +330,4 @@ Public Sub InitializeGlobalVariables()
     
     
 End Sub
+
